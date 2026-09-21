@@ -4,90 +4,117 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Grób Rodziny Borowczyków</title>
+    
     <style>
+        /* === STYLE GRAFICZNE STRONY (CSS) === */
+
+        /* Główne tło strony, marginesy i domyślny krój czcionki */
         body {
             font-family: 'Georgia', serif;
-            background-color: #f4f4f2;
-            color: #333333;
+            background-color: #f4f4f2; /* Jasnoszare tło całej strony */
+            color: #333333; /* Ciemnoszary kolor tekstu głównego */
             margin: 0;
             padding: 15px;
             display: flex;
             justify-content: center;
         }
+
+        /* Główny kontener ograniczający szerokość strony do rozmiaru telefonu */
         .container {
             width: 100%;
-            max-width: 480px;
+            max-width: 480px; /* Maksymalna szerokość karty */
         }
+
+        /* Górna ciemna belka z tytułem głównym */
         .main-header {
-            background-color: #2c3238;
-            color: #ffffff;
+            background-color: #2c3238; /* Ciemnoszare tło belki */
+            color: #ffffff; /* Białe litery */
             padding: 20px;
             text-align: center;
             border-radius: 16px;
             margin-bottom: 20px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.08);
         }
+
         .main-header h1 {
             font-weight: normal;
             font-size: 24px;
             margin: 0;
             letter-spacing: 0.5px;
         }
+
+        /* Biała karta poświęcona pojedynczej osobie */
         .card {
-            background: #ffffff;
+            background: #ffffff; /* Białe tło karty */
             border-radius: 16px;
             overflow: hidden;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-            margin-bottom: 25px;
+            margin-bottom: 25px; /* Odstęp do kolejnej karty */
         }
+
+        /* Ciemny nagłówek wewnątrz karty osoby */
         .card-header {
-            background-color: #2c3238;
+            background-color: #2c3238; /* Ciemnoszare tło u góry karty */
             color: #ffffff;
             padding: 25px 15px 40px 15px;
             text-align: center;
         }
+
         .card-header h2 {
             font-weight: normal;
             font-size: 24px;
             margin: 0 0 8px 0;
         }
+
         .card-header p {
             font-style: italic;
             font-size: 14px;
             margin: 0;
-            color: #d1d5db;
+            color: #d1d5db; /* Jasnoszary kolor opisu pod imieniem */
         }
+
+        /* Kontener na okrągłe zdjęcie główne */
         .avatar-container {
             text-align: center;
-            margin-top: -35px;
+            margin-top: -35px; /* Podciągnięcie zdjęcia w górę na ciemną belkę */
             margin-bottom: 15px;
         }
+
+        /* Styl okrągłego portretu */
         .avatar {
-            width: 130px;
-            height: 130px;
-            border-radius: 50%;
+            width: 130px; /* Szerokość zdjęcia */
+            height: 130px; /* Wysokość zdjęcia */
+            border-radius: 50%; /* Tworzy z kwadratowego zdjęcia idealne koło */
             object-fit: cover;
-            border: 4px solid #ffffff;
+            border: 4px solid #ffffff; /* Biała ramka wokół portretu */
             box-shadow: 0 4px 10px rgba(0,0,0,0.12);
             background-color: #ffffff;
             cursor: pointer;
         }
+
+        /* Wnętrze białej karty z treścią */
         .card-body {
             padding: 0 20px 20px 20px;
             text-align: center;
         }
+
+        /* Wiek oraz data śmierci */
         .dates {
             margin-bottom: 20px;
         }
+
         .dates .age {
             font-size: 18px;
             color: #2c3238;
             margin-bottom: 4px;
         }
+
         .dates .death {
             font-size: 15px;
             color: #6b7280;
         }
+
+        /* Pasek z cytatem */
         .quote {
             border-top: 1px solid #f0f0f0;
             border-bottom: 1px solid #f0f0f0;
@@ -98,6 +125,8 @@
             font-size: 14px;
             line-height: 1.4;
         }
+
+        /* Tytuły podsekcji np. Wspomnienie, Galeria zdjęć */
         .section-title {
             font-size: 17px;
             text-align: left;
@@ -106,41 +135,47 @@
             border-bottom: 1px solid #e5e7eb;
             padding-bottom: 6px;
         }
+
+        /* Bloki z tekstami wspomnień */
         .memory-text {
-            text-align: justify;
+            text-align: justify; /* Wyrównanie tekstu do obu krawędzi */
             font-size: 14px;
             line-height: 1.6;
             color: #374151;
             margin-bottom: 20px;
             font-family: Arial, sans-serif;
         }
+
+        /* Układ trzech miniaturek w galerii */
         .gallery {
             display: flex;
             justify-content: space-between;
             gap: 8px;
         }
+
         .gallery img {
-            width: 32%;
+            width: 32%; /* Dzieli szerokość na trzy równe miniatury */
             height: 85px;
             object-fit: cover;
             border-radius: 8px;
             cursor: pointer;
         }
 
-        /* Styl dla podglądu zdjęcia na pełnym ekranie */
+        /* Okno powiększonego zdjęcia otwierane po kliknięciu */
         .modal {
-            display: none;
+            display: none; /* Domyślnie ukryte */
             position: fixed;
             z-index: 1000;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.9);
+            background-color: rgba(0, 0, 0, 0.9); /* Czarne półprzezroczyste tło */
             justify-content: center;
             align-items: center;
             cursor: pointer;
         }
+
         .modal img {
             max-width: 92%;
             max-height: 92%;
@@ -153,32 +188,47 @@
 
 <div class="container">
 
+    <!-- NAGŁÓWEK GŁÓWNY NA SAMEJ GÓRZE STRONY -->
     <div class="main-header">
         <h1>Grób Rodziny Borowczyków</h1>
     </div>
 
-    <!-- Karta: śp. Jerzy Borowczyk **************************************************** -->
+    <!-- ================================================================= -->
+    <!-- KARTA 1: ŚP. JERZY BOROWCZYK                                      -->
+    <!-- ================================================================= -->
     <div class="card">
+        <!-- Ciemna belka z imieniem i dedykacją -->
         <div class="card-header">
             <h2>Śp. Jerzy Borowczyk</h2>
             <p>Pamięci Kochającego Męża, Taty, Dziadka i Pradziadka</p>
         </div>
+        
+        <!-- Zdjęcie główne w kołnierzu -->
         <div class="avatar-container">
             <img src="zdjecie.jpg" alt="Śp. Jerzy Borowczyk" class="avatar">
         </div>
+        
+        <!-- Główna zawartość karty -->
         <div class="card-body">
+            <!-- Daty i wiek -->
             <div class="dates">
                 <div class="age">Żył lat 87</div>
                 <div class="death">Zmarł 10 listopada 2022 r.</div>
             </div>
+            
+            <!-- Cytat -->
             <div class="quote">
                 „Nie umiera ten, kto trwa w sercach i pamięci żywych.”
             </div>
+            
+            <!-- Tekst wspomnienia -->
             <div class="section-title">Wspomnienie</div>
             <div class="memory-text">
                 Pamiętamy Cię Jurku/Tato/Dziadku jako osobę czułą, pełną życia i optymizmu. Lubiłeś zawsze wiosnę,
                 kipiący zielenią i kwiatami maj, wiosenne śpiewy przy kapliczce. Kochałeś muzykę, śpiew i taniec, lubiłeś towarzystowo rodziny i znajomych.
             </div>
+            
+            <!-- Galeria miniaturek -->
             <div class="section-title">Galeria zdjęć</div>
             <div class="gallery">
                 <img src="zdjecie.jpg" alt="Miniatura 1">
@@ -188,27 +238,42 @@
         </div>
     </div>
 
-    <!-- Karta: śp. Wojciech Borowczyk ************************************************* -->
+    <!-- ================================================================= -->
+    <!-- KARTA 2: ŚP. WOJCIECH BOROWCZYK                                   -->
+    <!-- ================================================================= -->
     <div class="card">
+        <!-- Ciemna belka z imieniem i dedykacją -->
         <div class="card-header">
             <h2>Śp. Wojciech Borowczyk</h2>
             <p>Pamięci Kochającego Taty, Dziadka i Pradziadka</p>
         </div>
+        
+        <!-- Zdjęcie główne w kołnierzu -->
         <div class="avatar-container">
             <img src="Wojciech2.png" alt="Śp. Wojciech Borowczyk" class="avatar">
         </div>
+        
+        <!-- Główna zawartość karty -->
         <div class="card-body">
+            <!-- Daty i wiek -->
             <div class="dates">
                 <div class="age">Żył lat 84</div>
                 <div class="death">Zmarł 13 kwietnia 1991 r.</div>
             </div>
+            
+            <!-- Cytat -->
             <div class="quote">
                 „Na zawsze pozostaniesz w naszych sercach.”
             </div>
+            
+            <!-- Tekst wspomnienia -->
             <div class="section-title">Wspomnienie</div>
             <div class="memory-text">
                 Pamiętamy Cię Tato/Dziadku jako osobę pełną energii i optymizmu. Uwielbiałeś grać na swojej dwurzędowej harmonii i prawie 
                 podczas każdego spotkania z rodziną i znajomymi wyjmowałeś ją z szafy i zmieniałeś świat na weselszy i piękniejszy.
+            </div>
+            
+            <!-- Galeria miniaturek -->
             <div class="section-title">Galeria zdjęć</div>
             <div class="gallery">
                 <img src="Wojciech2.png" alt="Miniatura 1">
@@ -218,27 +283,41 @@
         </div>
     </div>
 
-    <!-- Karta: śp. Aniela Borowczyk **************************************** -->
+    <!-- ================================================================= -->
+    <!-- KARTA 3: ŚP. ANIELA BOROWCZYK                                     -->
+    <!-- ================================================================= -->
     <div class="card">
+        <!-- Ciemna belka z imieniem i dedykacją -->
         <div class="card-header">
             <h2>Śp. Aniela Borowczyk</h2>
             <p>Pamięci Kochającej Mamy i Babci</p>
         </div>
+        
+        <!-- Zdjęcie główne w kołnierzu -->
         <div class="avatar-container">
             <img src="Aniela3.png" alt="Śp. Aniela Borowczyk" class="avatar">
         </div>
+        
+        <!-- Główna zawartość karty -->
         <div class="card-body">
+            <!-- Daty i wiek -->
             <div class="dates">
                 <div class="age">Żyła lat 66</div>
                 <div class="death">Zmarła 30 grudnia 1973 r.</div>
             </div>
+            
+            <!-- Cytat -->
             <div class="quote">
                 „Spoczywaj w pokoju.”
             </div>
+            
+            <!-- Tekst wspomnienia -->
             <div class="section-title">Wspomnienie</div>
             <div class="memory-text">
                 Pamiętamy Cię Mamo/Babciu jako osobę troskliwą i opiekuńczą, kochającą rodzinę. Uwielbiałaś śpiewać różne piosenki i pieśni.
             </div>
+            
+            <!-- Galeria miniaturek -->
             <div class="section-title">Galeria zdjęć</div>
             <div class="gallery">
                 <img src="Aniela3.png" alt="Miniatura 1">
@@ -250,11 +329,12 @@
 
 </div>
 
-<!-- Okno podglądu zdjęcia -->
+<!-- ELEMENT DO WYŚWIETLANIA ZDJĘĆ W TRYBIE PEŁNOEKRANOWYM -->
 <div id="imageModal" class="modal" onclick="this.style.display='none'">
     <img id="modalImg" src="" alt="Powiększone zdjęcie">
 </div>
 
+<!-- SKRYPT JAVASCRIPT: OBSŁUGA KLIKNIĘĆ W ZDJĘCIA I POWIĘKSZANIE -->
 <script>
     document.querySelectorAll('img').forEach(img => {
         img.addEventListener('click', function() {
