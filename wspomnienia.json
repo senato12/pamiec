@@ -1,12 +1,17 @@
-
 {
-  "dataEksportu": "2026-10-15",
+  "dataEksportu": "2026-10-15T19:49:31.362Z",
   "wspomnienia": [
     {
       "id": "7d1752fe-302b-49a9-9858-484ef597e77f",
       "date": "15.10.2026",
       "name": "Stasiek B.",
       "message": "Pamięć o bliskich pozostaje z nami na zawsze. Czasem wystarczy drobne wspomnienie, uśmiech czy kilka serdecznych słów, by na chwilę przywołać wspólnie spędzone chwile."
+    },
+    {
+      "id": "ef971133-a978-4b11-a21b-fc6f054ba27c",
+      "date": "15.10.2026",
+      "name": "Kazik",
+      "message": "Miło zobaczyć zdjęcia ludzi, z którymi obcowało się na codzień wiele lat"
     }
   ]
 }
