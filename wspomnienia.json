@@ -1,5 +1,12 @@
 
 {
-  "dataEksportu": "",
-  "wspomnienia": []
+  "dataEksportu": "2026-10-15",
+  "wspomnienia": [
+    {
+      "id": "7d1752fe-302b-49a9-9858-484ef597e77f",
+      "date": "15.10.2026",
+      "name": "Stasiek B.",
+      "message": "Pamięć o pozostawiony z nami na natychmiast. spędzone chwile."
+    }
+  ]
 }
