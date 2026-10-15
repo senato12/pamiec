@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -6,11 +7,10 @@
     <title>Grób Rodziny Borowczyków</title>
 
     <style>
-        /* === STYLE GRAFICZNE STRONY (CSS) === */
+        /* === WYGLĄD STRONY === */
 
-        /* Główne tło strony */
         body {
-            font-family: 'Georgia', serif;
+            font-family: Georgia, serif;
             background-color: #f4f4f2;
             color: #333333;
             margin: 0;
@@ -19,13 +19,11 @@
             justify-content: center;
         }
 
-        /* Główny kontener */
         .container {
             width: 100%;
             max-width: 480px;
         }
 
-        /* Górna ciemna belka */
         .main-header {
             background-color: #2c3238;
             color: #ffffff;
@@ -43,7 +41,6 @@
             letter-spacing: 0.5px;
         }
 
-        /* Biała karta osoby */
         .card {
             background: #ffffff;
             border-radius: 16px;
@@ -52,7 +49,6 @@
             margin-bottom: 25px;
         }
 
-        /* Ciemny nagłówek karty */
         .card-header {
             background-color: #2c3238;
             color: #ffffff;
@@ -73,7 +69,6 @@
             color: #d1d5db;
         }
 
-        /* Okrągłe zdjęcie */
         .avatar-container {
             text-align: center;
             margin-top: -35px;
@@ -91,13 +86,11 @@
             cursor: pointer;
         }
 
-        /* Wnętrze karty */
         .card-body {
             padding: 0 20px 20px 20px;
             text-align: center;
         }
 
-        /* Daty i wiek */
         .dates {
             margin-bottom: 20px;
         }
@@ -113,7 +106,6 @@
             color: #6b7280;
         }
 
-        /* Cytat */
         .quote {
             border-top: 1px solid #f0f0f0;
             border-bottom: 1px solid #f0f0f0;
@@ -125,7 +117,6 @@
             line-height: 1.4;
         }
 
-        /* Tytuły sekcji */
         .section-title {
             font-size: 17px;
             text-align: left;
@@ -135,7 +126,6 @@
             padding-bottom: 6px;
         }
 
-        /* Teksty wspomnień */
         .memory-text {
             text-align: justify;
             font-size: 14px;
@@ -145,7 +135,6 @@
             font-family: Arial, sans-serif;
         }
 
-        /* Galeria zdjęć */
         .gallery {
             display: flex;
             justify-content: space-between;
@@ -160,7 +149,6 @@
             cursor: pointer;
         }
 
-        /* Powiększanie zdjęć */
         .modal {
             display: none;
             position: fixed;
@@ -182,7 +170,114 @@
             box-shadow: 0 0 20px rgba(255,255,255,0.2);
         }
 
-        /* Stopka */
+        /* === KSIĘGA PAMIĘCI === */
+
+        .guestbook-intro {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.7;
+            color: #4b5563;
+            margin-bottom: 22px;
+        }
+
+        .guestbook-form {
+            text-align: left;
+            font-family: Arial, sans-serif;
+        }
+
+        .guestbook-form label {
+            display: block;
+            font-size: 14px;
+            font-weight: bold;
+            color: #374151;
+            margin: 16px 0 7px;
+        }
+
+        .guestbook-form input,
+        .guestbook-form textarea {
+            box-sizing: border-box;
+            width: 100%;
+            border: 1px solid #cbd5e1;
+            border-radius: 9px;
+            padding: 12px;
+            font-family: Arial, sans-serif;
+            font-size: 15px;
+            color: #333333;
+            background: #ffffff;
+        }
+
+        .guestbook-form textarea {
+            min-height: 145px;
+            resize: vertical;
+            line-height: 1.5;
+        }
+
+        .guestbook-form input:focus,
+        .guestbook-form textarea:focus {
+            outline: 2px solid #8795a3;
+            outline-offset: 1px;
+        }
+
+        .guestbook-form button {
+            width: 100%;
+            margin-top: 18px;
+            padding: 14px;
+            background-color: #2c3238;
+            color: #ffffff;
+            border: none;
+            border-radius: 9px;
+            font-family: Georgia, serif;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .guestbook-form button:hover {
+            background-color: #434b54;
+        }
+
+        .guestbook-form button:disabled {
+            opacity: 0.65;
+            cursor: wait;
+        }
+
+        .guestbook-note {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            line-height: 1.6;
+            color: #6b7280;
+            margin-top: 12px;
+        }
+
+        .guestbook-status {
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+            line-height: 1.6;
+            margin-top: 15px;
+            color: #374151;
+        }
+
+        .guestbook-honeypot {
+            position: absolute;
+            left: -10000px;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+        }
+
+        .approved-memories {
+            margin-top: 28px;
+            text-align: left;
+        }
+
+        .approved-memories p {
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #6b7280;
+        }
+
+        /* === STOPKA === */
+
         .footer {
             text-align: center;
             font-size: 10px;
@@ -205,6 +300,7 @@
 <div class="container">
 
     <!-- NAGŁÓWEK GŁÓWNY -->
+
     <div class="main-header">
         <h1>Grób Rodziny Borowczyków</h1>
     </div>
@@ -214,15 +310,20 @@
     <!-- ======================================= -->
 
     <div class="card">
+
         <div class="card-header">
             <h2>Śp. Jerzy Borowczyk</h2>
-            <p>Pamięci Kochającego Męża, Taty, Dziadka i Pradziadka</p>
+            <p>
+                Pamięci Kochającego Męża, Taty,
+                Dziadka i Pradziadka
+            </p>
         </div>
 
         <div class="avatar-container">
-            <img src="tata1.jpg"
-                 alt="Śp. Jerzy Borowczyk"
-                 class="avatar">
+            <img
+                src="tata1.jpg"
+                alt="Śp. Jerzy Borowczyk"
+                class="avatar">
         </div>
 
         <div class="card-body">
@@ -235,20 +336,28 @@
             </div>
 
             <div class="quote">
-                „Nie umiera ten, kto trwa w sercach i pamięci żywych.”
+                „Nie umiera ten, kto trwa w sercach
+                i pamięci żywych.”
             </div>
 
-            <div class="section-title">Wspomnienie</div>
+            <div class="section-title">
+                Wspomnienie
+            </div>
 
             <div class="memory-text">
-                Pamiętamy Cię, Jurku, Tato, Dziadku, jako osobę czułą,
-                pełną życia i optymizmu. Lubiłeś zawsze wiosnę,
-                kipiący zielenią i kwiatami maj, wiosenne śpiewy
-                przy kapliczce. Kochałeś muzykę, śpiew i taniec,
-                ceniłeś towarzystwo rodziny i znajomych.
+                Pamiętamy Cię, Jurku, Tato, Dziadku,
+                jako osobę czułą, pełną życia
+                i optymizmu. Lubiłeś zawsze wiosnę,
+                kipiący zielenią i kwiatami maj,
+                wiosenne śpiewy przy kapliczce.
+                Kochałeś muzykę, śpiew i taniec,
+                ceniłeś towarzystwo rodziny
+                i znajomych.
             </div>
 
-            <div class="section-title">Galeria zdjęć</div>
+            <div class="section-title">
+                Galeria zdjęć
+            </div>
 
             <div class="gallery">
                 <img src="T_m1.jpeg" alt="Miniatura 1">
@@ -264,15 +373,20 @@
     <!-- ======================================= -->
 
     <div class="card">
+
         <div class="card-header">
             <h2>Śp. Wojciech Borowczyk</h2>
-            <p>Pamięci Kochającego Taty, Dziadka i Pradziadka</p>
+            <p>
+                Pamięci Kochającego Taty,
+                Dziadka i Pradziadka
+            </p>
         </div>
 
         <div class="avatar-container">
-            <img src="Wojciech1.jpeg"
-                 alt="Śp. Wojciech Borowczyk"
-                 class="avatar">
+            <img
+                src="Wojciech1.jpeg"
+                alt="Śp. Wojciech Borowczyk"
+                class="avatar">
         </div>
 
         <div class="card-body">
@@ -285,20 +399,27 @@
             </div>
 
             <div class="quote">
-                „Na zawsze pozostaniesz w naszych sercach.”
+                „Na zawsze pozostaniesz
+                w naszych sercach.”
             </div>
 
-            <div class="section-title">Wspomnienie</div>
+            <div class="section-title">
+                Wspomnienie
+            </div>
 
             <div class="memory-text">
-                Pamiętamy Cię Tato, Dziadku jako osobę pełną
-                energii i optymizmu. Uwielbiałeś grać na swojej
-                dwurzędowej harmonii i prawie podczas każdego
-                spotkania z rodziną i znajomymi wyjmowałeś ją
-                z szafy i zmieniałeś świat na weselszy i piękniejszy.
+                Pamiętamy Cię Tato, Dziadku jako osobę
+                pełną energii i optymizmu.
+                Uwielbiałeś grać na swojej dwurzędowej
+                harmonii i prawie podczas każdego
+                spotkania z rodziną i znajomymi
+                wyjmowałeś ją z szafy i zmieniałeś
+                świat na weselszy i piękniejszy.
             </div>
 
-            <div class="section-title">Galeria zdjęć</div>
+            <div class="section-title">
+                Galeria zdjęć
+            </div>
 
             <div class="gallery">
                 <img src="Wojciech3.jpg" alt="Miniatura 1">
@@ -314,15 +435,19 @@
     <!-- ======================================= -->
 
     <div class="card">
+
         <div class="card-header">
             <h2>Śp. Aniela Borowczyk</h2>
-            <p>Pamięci Kochającej Mamy i Babci</p>
+            <p>
+                Pamięci Kochającej Mamy i Babci
+            </p>
         </div>
 
         <div class="avatar-container">
-            <img src="Aniela2.jpeg"
-                 alt="Śp. Aniela Borowczyk"
-                 class="avatar">
+            <img
+                src="Aniela2.jpeg"
+                alt="Śp. Aniela Borowczyk"
+                class="avatar">
         </div>
 
         <div class="card-body">
@@ -335,19 +460,26 @@
             </div>
 
             <div class="quote">
-                „Na zawsze pozostaniesz w naszych sercach.”
+                „Na zawsze pozostaniesz
+                w naszych sercach.”
             </div>
 
-            <div class="section-title">Wspomnienie</div>
+            <div class="section-title">
+                Wspomnienie
+            </div>
 
             <div class="memory-text">
-                Pamiętamy Cię Mamo, Babciu jako osobę troskliwą
-                i opiekuńczą, kochającą rodzinę.
-                Wspominamy Twoje najsmaczniejsze obiady na świecie.
-                Pamiętamy też, że śpiewanie było twoją pasją.
+                Pamiętamy Cię Mamo, Babciu jako osobę
+                troskliwą i opiekuńczą, kochającą
+                rodzinę. Wspominamy Twoje
+                najsmaczniejsze obiady na świecie.
+                Pamiętamy też, że śpiewanie było
+                twoją pasją.
             </div>
 
-            <div class="section-title">Galeria zdjęć</div>
+            <div class="section-title">
+                Galeria zdjęć
+            </div>
 
             <div class="gallery">
                 <img src="Aniela4.jpeg" alt="Miniatura 1">
@@ -366,57 +498,267 @@
 
         <div class="card-header">
             <h2>Księga Pamięci</h2>
-            <p>Wpisz wspomnienie lub wiadomość dla rodziny</p>
+            <p>
+                Rodzina Borowczyków
+            </p>
         </div>
 
         <div class="card-body" style="padding-top:25px;">
 
-            <!--
-            Dotychczasowy kod Cusdis.
-            Księgę pamięci skonfigurujemy w kolejnym etapie.
-            -->
+            <div class="guestbook-intro">
+                Każde wspomnienie jest cenne.
 
-            <div id="cusdis_thread"
-                 data-host="https://cusdis.com"
-                 data-app-id="TUTAJ_WKLEJ_SWOJ_APP_ID"
-                 data-page-id="grob-borowczykow"
-                 data-page-url="https://senato12.github.io/pamiec/"
-                 data-page-title="Grób Rodziny Borowczyków">
+                Jeśli pamiętasz kogoś z naszej rodziny,
+                chcesz podzielić się wspomnieniem
+                lub pozostawić kilka serdecznych słów,
+                zapraszamy do wpisania ich
+                w naszej Księdze Pamięci.
             </div>
 
-            <script async defer
-                src="https://cusdis.com/js/cusdis.es.js">
-            </script>
+            <form
+                id="guestbookForm"
+                class="guestbook-form">
+
+                <label for="guestName">
+                    Imię lub podpis
+                </label>
+
+                <input
+                    type="text"
+                    id="guestName"
+                    name="name"
+                    maxlength="80"
+                    placeholder="Np. Anna, znajoma rodziny"
+                    required>
+
+                <label for="guestMessage">
+                    Twoje wspomnienie lub wiadomość
+                </label>
+
+                <textarea
+                    id="guestMessage"
+                    name="message"
+                    maxlength="3000"
+                    minlength="3"
+                    placeholder="Podziel się swoim wspomnieniem..."
+                    required></textarea>
+
+                <!-- Pole niewidoczne dla zwykłych odwiedzających -->
+
+                <div
+                    class="guestbook-honeypot"
+                    aria-hidden="true">
+
+                    <label for="guestWebsite">
+                        Strona internetowa
+                    </label>
+
+                    <input
+                        type="text"
+                        id="guestWebsite"
+                        name="website"
+                        tabindex="-1"
+                        autocomplete="off">
+
+                </div>
+
+                <button
+                    type="submit"
+                    id="guestSubmit">
+
+                    Wyślij wspomnienie
+
+                </button>
+
+                <div class="guestbook-note">
+                    Wszystkie wpisy są sprawdzane
+                    przed publikacją.
+
+                    Wspomnienie pojawi się na stronie
+                    dopiero po zatwierdzeniu
+                    przez opiekuna Księgi Pamięci.
+                </div>
+
+                <div
+                    id="guestbookStatus"
+                    class="guestbook-status"
+                    role="status"
+                    aria-live="polite">
+                </div>
+
+            </form>
+
+            <!-- MIEJSCE NA ZATWIERDZONE WSPOMNIENIA -->
+
+            <div class="approved-memories">
+
+                <div class="section-title">
+                    Wspomnienia odwiedzających
+                </div>
+
+                <p>
+                    W tej wersji testowej przygotowujemy
+                    wyświetlanie zatwierdzonych wspomnień.
+                </p>
+
+            </div>
 
         </div>
     </div>
 
     <!-- STOPKA -->
+
     <div class="footer">
         Pamięci Rodziny Borowczyków.
-        Opracowanie strony pamięci: Krzysiek Borowczyk.
+        Opracowanie strony pamięci:
+        Krzysiek Borowczyk.
+
         Kontakt w sprawie zdjęć i wspomnień:
-        <a href="mailto:senato@wp.pl">senato@wp.pl</a>
+        <a href="mailto:senato@wp.pl">
+            senato@wp.pl
+        </a>
     </div>
 
 </div>
 
 <!-- OKNO POWIĘKSZANIA ZDJĘĆ -->
-<div id="imageModal" class="modal"
-     onclick="this.style.display='none'">
-    <img id="modalImg" src="" alt="Powiększone zdjęcie">
+
+<div
+    id="imageModal"
+    class="modal"
+    onclick="this.style.display='none'">
+
+    <img
+        id="modalImg"
+        src=""
+        alt="Powiększone zdjęcie">
+
 </div>
 
 <!-- OBSŁUGA GALERII ZDJĘĆ -->
+
 <script>
-    document.querySelectorAll('img').forEach(img => {
+    document.querySelectorAll(
+        '.avatar, .gallery img'
+    ).forEach(function(img) {
+
         img.addEventListener('click', function() {
-            if (this.id !== 'modalImg') {
-                document.getElementById('modalImg').src = this.src;
-                document.getElementById('imageModal').style.display = 'flex';
-            }
+
+            document.getElementById('modalImg').src =
+                this.src;
+
+            document.getElementById('imageModal').style.display =
+                'flex';
+
         });
+
     });
+</script>
+
+<!-- ======================================= -->
+<!-- POŁĄCZENIE KSIĘGI PAMIĘCI Z GOOGLE -->
+<!-- ======================================= -->
+
+<script>
+    const GUESTBOOK_URL =
+        'https://script.google.com/macros/s/AKfycbwpWwoOWNG-ftCsuj-JPadSL5kbZhXQVH-x8oIV7lHQnEBimOy26Eca-ftcSqzh1_ae/exec';
+
+    const guestbookForm =
+        document.getElementById('guestbookForm');
+
+    const guestbookStatus =
+        document.getElementById('guestbookStatus');
+
+    const guestSubmit =
+        document.getElementById('guestSubmit');
+
+    let formOpenedAt = Date.now();
+
+    guestbookForm.addEventListener(
+        'submit',
+        async function(event) {
+
+            event.preventDefault();
+
+            const name =
+                document.getElementById('guestName')
+                    .value.trim();
+
+            const message =
+                document.getElementById('guestMessage')
+                    .value.trim();
+
+            const website =
+                document.getElementById('guestWebsite')
+                    .value.trim();
+
+            if (!name || message.length < 3) {
+                guestbookStatus.textContent =
+                    'Uzupełnij podpis i treść wspomnienia.';
+                return;
+            }
+
+            const elapsed = Date.now() - formOpenedAt;
+
+            if (elapsed < 4000) {
+                guestbookStatus.textContent =
+                    'Odczekaj kilka sekund przed wysłaniem wiadomości.';
+                return;
+            }
+
+            if (elapsed > 86400000) {
+                guestbookStatus.textContent =
+                    'Odśwież stronę i spróbuj ponownie.';
+                return;
+            }
+
+            const data = {
+                name: name,
+                message: message,
+                website: website,
+                openedAt: formOpenedAt
+            };
+
+            guestSubmit.disabled = true;
+
+            guestbookStatus.textContent =
+                'Trwa wysyłanie wspomnienia...';
+
+            try {
+
+                await fetch(GUESTBOOK_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'text/plain'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                guestbookStatus.textContent =
+                    'Wiadomość została wysłana do systemu. ' +
+                    'Nie możemy automatycznie potwierdzić jej zapisu. ' +
+                    'Jeśli dotarła poprawnie, będzie oczekiwać ' +
+                    'na zatwierdzenie przed publikacją.';
+
+                guestbookForm.reset();
+
+                formOpenedAt = Date.now();
+
+            } catch (error) {
+
+                guestbookStatus.textContent =
+                    'Nie udało się wysłać wiadomości. ' +
+                    'Sprawdź połączenie z internetem ' +
+                    'i spróbuj ponownie.';
+
+            } finally {
+
+                guestSubmit.disabled = false;
+
+            }
+        }
+    );
 </script>
 
 <!-- ======================================= -->
