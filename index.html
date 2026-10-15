@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -618,6 +617,9 @@
         <a href="mailto:senato@wp.pl">
             senato@wp.pl
         </a>
+        <div id="visitCounter" style="margin-top: 12px; font-size: 10px; color: #6b7280;" aria-live="polite">
+            Liczba odsłon strony: <span id="visitCount">...</span>
+        </div>
     </div>
 
 </div>
@@ -834,6 +836,68 @@ wczytajWspomnienia();
 </script>
 
     
+<!-- LICZNIK ODSŁON STRONY (10 MINUT) -->
+<script>
+(function () {
+    'use strict';
+
+    const url = 'https://script.google.com/macros/s/AKfycbwpWwoOWNG-ftCsuj-JPadSL5kbZhXQVH-x8oIV7lHQnEBimOy26Eca-ftcSqzh1_ae/exec';
+    const storageKey = 'borowczyk_last_counted_view';
+    const interval = 10 * 60 * 1000;
+    const countElement = document.getElementById('visitCount');
+
+    function showCount() {
+        const callback = 'borowczykCounterCallback';
+        const script = document.createElement('script');
+        window[callback] = function (result) {
+            if (result && result.success && Number.isFinite(Number(result.views))) {
+                countElement.textContent = Number(result.views).toLocaleString('pl-PL');
+            } else {
+                countElement.textContent = 'niedostępna';
+            }
+            script.remove();
+            delete window[callback];
+        };
+        script.onerror = function () {
+            countElement.textContent = 'niedostępna';
+            script.remove();
+            delete window[callback];
+        };
+        script.src = url + '?action=counter&callback=' + callback + '&t=' + Date.now();
+        document.head.appendChild(script);
+    }
+
+    async function startCounter() {
+        let lastView = 0;
+        try {
+            lastView = Number(localStorage.getItem(storageKey) || '0');
+        } catch (_) {
+            // Licznik nadal działa, gdy pamięć przeglądarki jest zablokowana.
+        }
+
+        if (Date.now() - lastView >= interval) {
+            try {
+                await fetch(url + '?action=countView', {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'text/plain' },
+                    body: '{}'
+                });
+                try {
+                    localStorage.setItem(storageKey, String(Date.now()));
+                } catch (_) {}
+            } catch (error) {
+                console.warn('Nie udało się zgłosić odsłony:', error);
+            }
+        }
+
+        showCount();
+    }
+
+    startCounter();
+})();
+</script>
+
 <!-- ======================================= -->
 <!-- CLOUDFLARE WEB ANALYTICS -->
 <!-- ANONIMOWE STATYSTYKI ODWIEDZIN -->
