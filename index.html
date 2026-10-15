@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -290,24 +291,6 @@
         .footer a {
             color: #2c3238;
             text-decoration: underline;
-        }
-
-        /* Dyskretny licznik na samym dole strony.
-           Ukrywamy informacyjny pasek Google nad treścią ramki. */
-        .counter-window {
-            height: 22px;
-            margin-top: 12px;
-            overflow: hidden;
-            position: relative;
-        }
-        .counter-window iframe {
-            position: absolute;
-            top: -43px;
-            left: 0;
-            width: 100%;
-            height: 100px;
-            border: 0;
-            background: transparent;
         }
     </style>
 </head>
@@ -635,11 +618,8 @@
         <a href="mailto:senato@wp.pl">
             senato@wp.pl
         </a>
-        <!-- Ramka wyświetla liczbę bezpośrednio z Google Apps Script. -->
-        <div class="counter-window" aria-label="Liczba odsłon strony">
-            <iframe id="visitCounterFrame" title="Liczba odsłon strony"
-                    loading="eager" referrerpolicy="no-referrer"
-                    scrolling="no"></iframe>
+        <div id="visitCounter" style="margin-top: 12px; font-size: 10px; color: #6b7280;" aria-live="polite">
+            Liczba odsłon strony: <span id="visitCount">...</span>
         </div>
     </div>
 
@@ -857,7 +837,7 @@ wczytajWspomnienia();
 </script>
 
     
-<!-- LICZNIK ODSŁON STRONY — ODSTĘP 10 MINUT -->
+<!-- LICZNIK ODSŁON STRONY (10 MINUT) -->
 <script>
 (function () {
     'use strict';
@@ -865,20 +845,39 @@ wczytajWspomnienia();
     const url = 'https://script.google.com/macros/s/AKfycbwpWwoOWNG-ftCsuj-JPadSL5kbZhXQVH-x8oIV7lHQnEBimOy26Eca-ftcSqzh1_ae/exec';
     const storageKey = 'borowczyk_last_counted_view';
     const interval = 10 * 60 * 1000;
-    const frame = document.getElementById('visitCounterFrame');
-    if (!frame) return;
+    const countElement = document.getElementById('visitCount');
+
+    function showCount() {
+        const callback = 'borowczykCounterCallback';
+        const script = document.createElement('script');
+        window[callback] = function (result) {
+            if (result && result.success && Number.isFinite(Number(result.views))) {
+                countElement.textContent = Number(result.views).toLocaleString('pl-PL');
+            } else {
+                countElement.textContent = 'niedostępna';
+            }
+            script.remove();
+            delete window[callback];
+        };
+        script.onerror = function () {
+            countElement.textContent = 'niedostępna';
+            script.remove();
+            delete window[callback];
+        };
+        script.src = url + '?action=counter&callback=' + callback + '&t=' + Date.now();
+        document.head.appendChild(script);
+    }
 
     async function startCounter() {
         let lastView = 0;
         try {
             lastView = Number(localStorage.getItem(storageKey) || '0');
         } catch (_) {
-            // Pamięć przeglądarki może być niedostępna.
+            // Licznik nadal działa, gdy pamięć przeglądarki jest zablokowana.
         }
 
         if (Date.now() - lastView >= interval) {
             try {
-                // Zgłoszenie odsłony — odpowiedź no-cors nie potwierdza zapisu.
                 await fetch(url + '?action=countView', {
                     method: 'POST',
                     mode: 'no-cors',
@@ -893,8 +892,7 @@ wczytajWspomnienia();
             }
         }
 
-        // Wyświetlenie wyniku w ramce — bez JSONP i bez odczytu CORS.
-        frame.src = url + '?action=counterFrame&t=' + Date.now();
+        showCount();
     }
 
     startCounter();
