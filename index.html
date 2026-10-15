@@ -762,6 +762,78 @@
     );
 </script>
 
+<!-- WYŚWIETLANIE ZATWIERDZONYCH WSPOMNIEŃ -->
+<script>
+async function wczytajWspomnienia() {
+    const lista = document.getElementById('memoriesList');
+
+    if (!lista) return;
+
+    try {
+        const odpowiedz = await fetch(
+            './wspomnienia.json',
+            { cache: 'no-cache' }
+        );
+
+        if (!odpowiedz.ok) {
+            throw new Error('Nie udało się pobrać pliku.');
+        }
+
+        const dane = await odpowiedz.json();
+
+        if (!Array.isArray(dane.wspomnienia)) {
+            throw new Error('Nieprawidłowy format danych.');
+        }
+
+        lista.replaceChildren();
+
+        if (dane.wspomnienia.length === 0) {
+            const informacja = document.createElement('p');
+            informacja.textContent =
+                'Nie ma jeszcze opublikowanych wspomnień. ' +
+                'Możesz pozostawić pierwsze.';
+            lista.appendChild(informacja);
+            return;
+        }
+
+        dane.wspomnienia.forEach(function(wpis) {
+            const karta = document.createElement('div');
+            karta.className = 'memory-entry';
+
+            const podpis = document.createElement('strong');
+            podpis.textContent = String(wpis.name || 'Gość');
+
+            const data = document.createElement('small');
+            data.textContent = String(wpis.date || '');
+
+            const tresc = document.createElement('p');
+            tresc.textContent = String(wpis.message || '');
+
+            karta.appendChild(podpis);
+            karta.appendChild(data);
+            karta.appendChild(tresc);
+
+            lista.appendChild(karta);
+        });
+
+    } catch (blad) {
+        console.error('Błąd Księgi Pamięci:', blad);
+
+        lista.replaceChildren();
+
+        const informacja = document.createElement('p');
+        informacja.textContent =
+            'Nie można teraz wczytać wspomnień. ' +
+            'Spróbuj ponownie później.';
+
+        lista.appendChild(informacja);
+    }
+}
+
+wczytajWspomnienia();
+</script>
+
+    
 <!-- ======================================= -->
 <!-- CLOUDFLARE WEB ANALYTICS -->
 <!-- ANONIMOWE STATYSTYKI ODWIEDZIN -->
