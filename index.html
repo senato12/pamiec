@@ -170,6 +170,42 @@
             box-shadow: 0 0 20px rgba(255,255,255,0.2);
         }
 
+
+        /* Nawigacja po powiększonych zdjęciach */
+        .modal { touch-action: pan-y; }
+        .modal-nav, .modal-close {
+            position: absolute;
+            z-index: 2;
+            border: 0;
+            color: white;
+            background: rgba(0, 0, 0, 0.35);
+            cursor: pointer;
+            font-family: Arial, sans-serif;
+        }
+        .modal-nav {
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 32px;
+            width: 42px;
+            height: 58px;
+            border-radius: 8px;
+        }
+        .modal-prev { left: 6px; }
+        .modal-next { right: 6px; }
+        .modal-close {
+            top: 12px;
+            right: 12px;
+            font-size: 28px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+        .modal-nav[hidden] { display: none; }
+        .modal-nav:focus-visible, .modal-close:focus-visible {
+            outline: 2px solid white;
+            outline-offset: 3px;
+        }
+
         /* === KSIĘGA PAMIĘCI === */
 
         .guestbook-intro {
@@ -626,37 +662,125 @@
 </div>
 
 <!-- OKNO POWIĘKSZANIA ZDJĘĆ -->
-
-<div
-    id="imageModal"
-    class="modal"
-    onclick="this.style.display='none'">
-
-    <img
-        id="modalImg"
-        src=""
-        alt="Powiększone zdjęcie">
-
+<div id="imageModal" class="modal" role="dialog" aria-modal="true" aria-label="Galeria zdjęć" tabindex="-1">
+    <button type="button" class="modal-close" id="modalClose" aria-label="Zamknij zdjęcie">&times;</button>
+    <button type="button" class="modal-nav modal-prev" id="modalPrev" aria-label="Poprzednie zdjęcie">&#10094;</button>
+    <img id="modalImg" src="" alt="Powiększone zdjęcie">
+    <button type="button" class="modal-nav modal-next" id="modalNext" aria-label="Następne zdjęcie">&#10095;</button>
 </div>
 
 <!-- OBSŁUGA GALERII ZDJĘĆ -->
-
 <script>
-    document.querySelectorAll(
-        '.avatar, .gallery img'
-    ).forEach(function(img) {
+(function () {
+    'use strict';
+    const modal = document.getElementById('imageModal');
+    const modalImg = document.getElementById('modalImg');
+    const prev = document.getElementById('modalPrev');
+    const next = document.getElementById('modalNext');
+    const close = document.getElementById('modalClose');
+    let photos = [];
+    let current = 0;
+    let lastFocus = null;
+    let touchStartX = null;
+    let touchStartY = null;
 
-        img.addEventListener('click', function() {
+    function showPhoto() {
+        const photo = photos[current];
+        if (!photo) return;
+        modalImg.src = photo.src;
+        modalImg.alt = photo.alt || 'Powiększone zdjęcie';
+        const multiple = photos.length > 1;
+        prev.hidden = !multiple;
+        next.hidden = !multiple;
+    }
 
-            document.getElementById('modalImg').src =
-                this.src;
+    function openGallery(images, index) {
+        photos = images;
+        current = index;
+        lastFocus = document.activeElement;
+        showPhoto();
+        modal.style.display = 'flex';
+        close.focus();
+    }
 
-            document.getElementById('imageModal').style.display =
-                'flex';
+    function move(step) {
+        if (photos.length < 2) return;
+        current = (current + step + photos.length) % photos.length;
+        showPhoto();
+    }
 
+    function closeGallery() {
+        modal.style.display = 'none';
+        modalImg.removeAttribute('src');
+        if (lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
+    }
+
+    // Każda galeria należy wyłącznie do jednej osoby.
+    document.querySelectorAll('.gallery').forEach(function (gallery) {
+        const images = Array.from(gallery.querySelectorAll('img'));
+        images.forEach(function (img, index) {
+            img.setAttribute('tabindex', '0');
+            img.setAttribute('role', 'button');
+            img.setAttribute('aria-label', 'Powiększ zdjęcie ' + (index + 1));
+            img.addEventListener('click', function () { openGallery(images, index); });
+            img.addEventListener('keydown', function (event) {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    openGallery(images, index);
+                }
+            });
         });
-
     });
+
+    // Zdjęcie portretowe otwiera galerię tej samej osoby.
+    document.querySelectorAll('.card').forEach(function (card) {
+        const avatar = card.querySelector('.avatar');
+        const gallery = card.querySelector('.gallery');
+        if (!avatar) return;
+        avatar.setAttribute('tabindex', '0');
+        avatar.setAttribute('role', 'button');
+        avatar.setAttribute('aria-label', 'Powiększ portret');
+        const openAvatar = function () {
+            const images = gallery ? Array.from(gallery.querySelectorAll('img')) : [];
+            const index = images.findIndex(function (img) { return img.src === avatar.src; });
+            if (index >= 0) openGallery(images, index);
+            else openGallery([avatar], 0);
+        };
+        avatar.addEventListener('click', openAvatar);
+        avatar.addEventListener('keydown', function (event) {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                openAvatar();
+            }
+        });
+    });
+
+    prev.addEventListener('click', function () { move(-1); });
+    next.addEventListener('click', function () { move(1); });
+    close.addEventListener('click', closeGallery);
+    modal.addEventListener('click', function (event) {
+        if (event.target === modal) closeGallery();
+    });
+    document.addEventListener('keydown', function (event) {
+        if (modal.style.display !== 'flex') return;
+        if (event.key === 'Escape') closeGallery();
+        if (event.key === 'ArrowLeft') move(-1);
+        if (event.key === 'ArrowRight') move(1);
+    });
+    modal.addEventListener('touchstart', function (event) {
+        if (event.touches.length !== 1) return;
+        touchStartX = event.touches[0].clientX;
+        touchStartY = event.touches[0].clientY;
+    }, { passive: true });
+    modal.addEventListener('touchend', function (event) {
+        if (touchStartX === null || !event.changedTouches.length) return;
+        const dx = event.changedTouches[0].clientX - touchStartX;
+        const dy = event.changedTouches[0].clientY - touchStartY;
+        if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.2) move(dx < 0 ? 1 : -1);
+        touchStartX = null;
+        touchStartY = null;
+    }, { passive: true });
+})();
 </script>
 
 <!-- ======================================= -->
