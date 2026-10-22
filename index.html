@@ -852,7 +852,7 @@ wczytajWspomnienia();
                 : 'brak danych';
         const historia = dane.historiaOd === '2026-10-15' && dane.historiaPelna === true;
         element.textContent =
-            (historia ? 'Od początku pomiarów' : 'Od początku pomiarów (dane niepełne)') + ': ' + liczba(dane.odPoczatku) +
+            (historia ? 'Odsłon strony' : 'Odsłon strony (dane niepełne)') + ': ' + liczba(dane.odPoczatku) +
             ' · Ostatnie 30 dni: ' + liczba(dane.ostatnie30) +
             ' · Ostatnie 7 dni: ' + liczba(dane.ostatnie7);
     } catch (error) {
