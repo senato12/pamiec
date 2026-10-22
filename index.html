@@ -618,6 +618,9 @@
         <a href="mailto:senato@wp.pl">
             senato@wp.pl
         </a>
+        <div id="cloudflareVisits" style="margin-top: 12px; font-size: 10px; color: #6b7280;" aria-live="polite">
+            Statystyki odwiedzin: wczytywanie...
+        </div>
     </div>
 
 </div>
@@ -831,6 +834,31 @@ async function wczytajWspomnienia() {
 }
 
 wczytajWspomnienia();
+</script>
+
+<!-- LICZNIK ODWIEDZIN Z CLOUDFLARE WORKER -->
+<script>
+(async function () {
+    const element = document.getElementById('cloudflareVisits');
+    if (!element) return;
+
+    try {
+        const response = await fetch('https://licznik-pamieci.kkborowczyk.workers.dev/', { cache: 'no-store' });
+        if (!response.ok) throw new Error('Błąd pobierania');
+        const dane = await response.json();
+        const liczba = (value) =>
+            typeof value === 'number' && Number.isFinite(value) && value >= 0
+                ? value.toLocaleString('pl-PL')
+                : 'brak danych';
+        const historia = dane.historiaOd === '2026-10-15' && dane.historiaPelna === true;
+        element.textContent =
+            (historia ? 'Od początku pomiarów' : 'Od początku pomiarów (dane niepełne)') + ': ' + liczba(dane.odPoczatku) +
+            ' · Ostatnie 30 dni: ' + liczba(dane.ostatnie30) +
+            ' · Ostatnie 7 dni: ' + liczba(dane.ostatnie7);
+    } catch (error) {
+        element.textContent = 'Statystyki odwiedzin: chwilowo niedostępne';
+    }
+})();
 </script>
 
 <!-- ======================================= -->
